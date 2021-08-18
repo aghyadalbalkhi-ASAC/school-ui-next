@@ -1,0 +1,37 @@
+body {
+    background-color: #eff3f6;
+}
+
+#header {
+    position: fixed;
+    width: 100%;
+    left: 0;
+    top: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+/* xs */
+.hide {
+    display: none;
+}
+
+@media screen and (min-width: 576px) {
+    .sm-show {
+        display: block;
+    }
+    .sm-hide {
+        display: none;
+    }
+}
+@media screen and (min-width: 768px) {
+    .md-show {
+        display: block;
+    }
+    .md-show-flex {
+        display: flex;
+    }
+    .md-hide {
+        display: none;
+    }
+}

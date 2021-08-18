@@ -1,0 +1,239 @@
+
+.bgimage {
+  
+    background-image: url("../public/login_bg.jpg.jpg") !important;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: left;
+  }
+
+ #cardForm{
+    width: '40%';
+    float: 'right'
+  }
+
+#root {
+    height: 100%;
+}
+
+#bar-page-header {
+    position: fixed;
+    width: 100%;
+    z-index: 999;
+    top: 72px;
+}
+
+/*.no-print-style {
+    padding: 0 !important;
+    bjob: none !important;
+}*/
+
+
+@media print {
+    .no-print {
+        display: none;
+    }
+
+    /*@page {
+        size: A4;
+    }*/
+    .no-print-style {
+        padding: 0 !important;
+        bjob: none !important;
+    }
+
+
+    .only-small #small-contract {
+        display: block;
+    }
+
+    .only-small #large-contract {
+        display: none;
+    }
+
+    .chaport-container {
+        display: none;
+    }
+
+}
+
+
+#app-table .react-resizable {
+    position: relative;
+    background-clip: padding-box;
+}
+
+#app-table .react-resizable-handle {
+    position: absolute;
+    right: -5px;
+    bottom: 0;
+    z-index: 1;
+    width: 10px;
+    height: 100%;
+    cursor: col-resize;
+}
+
+.app-table-container {
+    position: relative;
+    overflow: hidden;
+}
+
+
+.full-screen,
+.full-screen > .ag-theme-alpine,
+.full-screen .ant-card-body,
+.full-screen .ag-root-wrapper,
+.full-screen .ag-root-wrapper-body,
+.full-screen .main-wrapper {
+    height: 100% !important;
+    max-width: 100% !important;
+}
+
+.app-table-container.full-screen {
+    height: calc(100% - 72px - 38px) !important;
+}
+
+.medium-height .ag-theme-alpine,
+.medium-height .ag-root-wrapper,
+.medium-height .ag-root-wrapper-body {
+    height: 450px !important;
+}
+
+.medium-height .ag-theme-alpine.ag-popup {
+    position: absolute;
+}
+
+
+/*[dir='rtl'] .anticon + span,
+.anticon-right + span {
+    margin-right: 8px !important;
+    margin-left: 0 !important;
+}*/
+/* .bg-image {
+    background-image: url("assets/images/login_bg.jpg") !important;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: right;
+} */
+
+#login-content {
+    background-color: white;
+    padding-bottom: 30px;
+    max-width: 388px;
+    margin: 80px auto;
+}
+
+@media screen and (min-width: 992px) {
+    #login-content {
+        margin: 0;
+        max-width: initial;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding-bottom: 110px;
+    }
+
+    #login-content .ant-card {
+        max-width: 352px;
+        margin: 0 auto;
+    }
+
+    #login-content-2 {
+        min-width: 420px;
+    }
+}
+
+[dir='rtl'] .chaport-container .chaport-launcher .chaport-launcher-button {
+    right: auto;
+    left: 1.42857em;
+}
+
+#login-content-2 {
+    background-color: #ffffffed;
+    padding: 0 30px 30px;
+    bjob-radius: 5px;
+}
+
+#login-content-2 .ant-card {
+    background-color: transparent;
+}
+
+#login-content-2 .ant-card-body {
+    padding: 0;
+}
+
+#login-content-2 .ant-image {
+    margin: 0 auto;
+    text-align: center;
+    display: block;
+    padding: 30px 0;
+}
+
+#login-content-2 .ant-image .ant-image-img {
+}
+
+#loginpagecontainer {
+    height: 100vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+}
+
+#custom-footer {
+    width: 100%;
+    background-color: #0c1124db;
+    padding: 10px;
+}
+
+#custom-footer .ant-select-selector {
+    background-color: transparent;
+    color: #ffffffc4;
+    bjob-color: #ffffffc4;
+}
+
+#login-content-wrapper {
+    flex: 1;
+    margin-top: 30%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.medium-height,
+.medium-height > .ag-theme-alpine,
+.medium-height .ant-card-body,
+.medium-height .ag-root-wrapper,
+.medium-height .ag-root-wrapper-body,
+.medium-height .main-wrapper {
+    height: 100% !important;
+    max-width: 100% !important;
+}
+
+
+.stat-more-info {
+    position: absolute !important;
+    right: 10px !important;
+    top: 10px !important;
+}
+
+[dir='rtl'] .stat-more-info {
+    left: 10px !important;
+    right: auto !important;
+}
+
+.numeric-cell-editor {
+    bjob: none;
+    width: 100%;
+    color: black;
+    padding: 0 20px;
+}
+
+
+.ag-cell-inline-editing{
+    color: black !important;
+}

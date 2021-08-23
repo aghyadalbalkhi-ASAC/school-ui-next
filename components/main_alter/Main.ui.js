@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react';
-import './Main.style.css';
+import './Main.module.css';
 import {connect} from 'react-redux';
 import {
     Avatar,
@@ -28,7 +28,7 @@ import MainModel from './Main.model';
 import {getUser} from '../../services/authService';
 
 
-class MainUi extends Component<any, any> {
+class MainUi extends Component{
     state = {visible: false};
 
     componentDidMount() {
@@ -52,7 +52,7 @@ class MainUi extends Component<any, any> {
             visible: false
         });
     };
-    handleClick = (e: any) => {
+    handleClick = (e) => {
         console.log('click', e);
     }
 
@@ -82,7 +82,7 @@ class MainUi extends Component<any, any> {
                     }}
                 >
                     <Space size={10}>
-                        <span className={'hide sm-show'}>{t('Hi,')} {user?.full_name || user?.email}</span>
+                        <span className={'hide sm-show'}>{'Hi,'} {user?.full_name || user?.email}</span>
                         <Avatar
                             style={{backgroundColor: '#0077c1'}}
                             icon={<UserOutlined/>}
@@ -93,83 +93,76 @@ class MainUi extends Component<any, any> {
         );
     };
 
-    PublicDropdownMenu = () => {
-        const {i18n} = this.props;
-        let defaultValue = i18n.language
-        if (defaultValue !== 'en' && defaultValue.indexOf('en') !== -1) {
-            defaultValue = 'en';
-        }
-        return (
-            <Select defaultValue={defaultValue} onChange={this.handleClick}>
-                <Select.Option value="ar">عربي</Select.Option>
-                <Select.Option value="en">English</Select.Option>
-            </Select>
-        );
-    };
+    // PublicDropdownMenu = () => {
+    //     return (
+    //         <Select defaultValue={defaultValue} onChange={this.handleClick}>
+    //             <Select.Option value="ar">عربي</Select.Option>
+    //             <Select.Option value="en">English</Select.Option>
+    //         </Select>
+    //     );
+    // };
 
     getRoutes = () => {
-        const {t, i18n} = this.props;
-
         return [
             {
-                title: t('glossary:Dashboard'),
+                title: 'glossary:Dashboard',
                 icon: <DashboardOutlined/>,
                 subMenu: [
                     {
                         link: '/dashboard/jobs',
-                        title: t('glossary:Jobs'),
+                        title: 'glossary:Jobs',
                     }
                 ]
             },
             {
-                title: t('glossary:Financials'),
+                title: 'glossary:Financials',
                 icon: <DollarOutlined/>,
                 subMenu: [
                     {
                         link: '/admin/businesses/financials',
-                        title: t('glossary:Businesses')
+                        title: 'glossary:Businesses'
                     },
                     {
                         link: '/admin/employees/financials',
-                        title: t('glossary:Employees')
+                        title: 'glossary:Employees'
                     }
                 ]
             },
             {
-                title: t('glossary:Businesses'),
+                title: 'glossary:Businesses',
                 icon: <ShopOutlined/>,
                 link: '/businesses'
             },
             {
                 link: '/employees',
-                title: t('glossary:Employees'),
+                title: 'glossary:Employees',
                 icon: <UserOutlined/>
             },
             {
-                title: t('glossary:Addresses'),
+                title: 'glossary:Addresses',
                 icon: <EnvironmentOutlined/>,
                 subMenu: [
                     {
                         link: '/states',
-                        title: t('glossary:States')
+                        title: 'glossary:States'
                     },
                     {
                         link: '/cities',
-                        title: t('glossary:Cities')
+                        title: 'glossary:Cities'
                     },
                     {
                         link: '/areas',
-                        title: t('glossary:Areas')
+                        title: 'glossary:Areas'
                     }
                 ]
             },
             {
-                title: t('glossary:Settings'),
+                title: 'glossary:Settings',
                 icon: <SettingOutlined/>,
                 subMenu: [
                     {
                         link: '/system-settings',
-                        title: t('glossary:General Settings'),
+                        title: 'glossary:General Settings',
                     }
                 ]
             }
@@ -183,12 +176,10 @@ class MainUi extends Component<any, any> {
             children,
             isLoggedUser = true,
             mapActions = [],
-            t,
-            i18n,
             isFullHeightPage = false
-        }: any = this.props;
-        const {visible}: any = this.state;
-        const headerProps: any = {};
+        } = this.props;
+        const {visible} = this.state;
+        const headerProps = {};
 
         /*if (isBusinessUser()) {
             mapActions.push(
@@ -207,7 +198,7 @@ class MainUi extends Component<any, any> {
             ];
         } else {
             headerProps.extra = [
-                <this.PublicDropdownMenu key="more"/>
+                // <this.PublicDropdownMenu key="more"/>
             ];
         }
         let fullHeight = {};
@@ -230,7 +221,7 @@ class MainUi extends Component<any, any> {
                                 src={"fds"}
                             />
                         }
-                        subTitle={<span className={'hide sm-show'}>{t("On-demand recruitment!")}</span>}
+                        subTitle={<span className={'hide sm-show'}>{"On-demand recruitment!"}</span>}
                         {...headerProps}
                     />
                     <Divider style={{margin: 0}}/>
@@ -243,8 +234,8 @@ class MainUi extends Component<any, any> {
                     {children}
 
                     <Drawer
-                        title={t("Main Menu")}
-                        placement={i18n.dir() === 'ltr' ? 'left' : 'right'}
+                        title={"Main Menu"}
+                        // placement={i18n.dir() === 'ltr' ? 'left' : 'right'}
                         bodyStyle={{padding: 0}}
                         closable={false}
                         onClose={this.onClose}
@@ -257,7 +248,7 @@ class MainUi extends Component<any, any> {
                             ]}
                             mode="inline"
                         >
-                            {routes.map((route: any, index: number) => (
+                            {routes.map((route, index) => (
                                 <Fragment key={index}>
                                     {route.subMenu &&
                                     route.subMenu.length > 0 ? (
@@ -271,14 +262,14 @@ class MainUi extends Component<any, any> {
                                             title={
                                                 <div>
                                                     {route.icon}
-                                                    <span>{t(route.title)}</span>
+                                                    <span>{route.title}</span>
                                                 </div>
                                             }
                                         >
                                             {route.subMenu.map(
                                                 (
-                                                    subRoute: any,
-                                                    sub_index: number
+                                                    subRoute,
+                                                    sub_index
                                                 ) => (
                                                     <Menu.Item
                                                         key={`${index}${sub_index}`}
@@ -322,12 +313,12 @@ class MainUi extends Component<any, any> {
     }
 }
 
-const mapStateToProps = (state: any, ownProps: any) => state.main || {};
+const mapStateToProps = (state, ownProps) => state.main || {};
 
-const mapDispatchToProps = (dispatch: any) => ({
+const mapDispatchToProps = (dispatch) => ({
     // setPageTitle: () => dispatch(MainModel.mainAction('Main')),
     checkLoggedUser: () => dispatch(MainModel.checkLoggedUserAction()),
-    setLanguage: (lang: string) => dispatch(MainModel.setLanguageAction(lang)),
+    setLanguage: (lang) => dispatch(MainModel.setLanguageAction(lang)),
     logout: () => dispatch(MainModel.logoutAction())
 });
 export default connect(mapStateToProps, mapDispatchToProps)(

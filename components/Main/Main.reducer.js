@@ -9,7 +9,7 @@ import {
 
 import {default as initialState} from './Main.state';
 
-export const MainReducer = (state = initialState, action: any) => {
+export const MainReducer = (state = initialState, action) => {
     let newState = state;
     const removeErrorMessage = {message: '', error: false};
     switch (action.type) {

@@ -2,10 +2,8 @@ import React, {Component} from 'react';
 import {ExclamationCircleOutlined} from '@ant-design/icons';
 import {history} from 'react-router-guard';
 import {Button, Col, Drawer, Form, Modal, Row, Space} from 'antd';
-import {withTranslation} from "react-i18next";
-import {goToLink} from "../../services/authService";
 
-class FormDrawerUi extends Component<any, any> {
+class FormDrawerUi extends Component{
     deleteConfirm = () => {
         const {
             closeCallback,
@@ -15,11 +13,10 @@ class FormDrawerUi extends Component<any, any> {
         Modal.confirm({
             title: message,
             icon: <ExclamationCircleOutlined/>,
-            // content: 'When clicked the OK button, this dialog will be closed after 1 second',
             onOk: async () => {
                 const result = await action(id);
                 closeCallback(result);
-                goToLink(callbackRoute);
+                // goToLink(callbackRoute);
             },
             onCancel() {
             }
@@ -27,9 +24,6 @@ class FormDrawerUi extends Component<any, any> {
     };
 
     ID = () => {
-        // Math.random should be unique because of its seeding algorithm.
-        // Convert it to base 36 (numbers + letters), and grab the first 9 characters
-        // after the decimal.
         const key = '_' + Math.random().toString(36).substr(2, 9);
         if (this.props.onFormKey) {
             this.props.onFormKey(key)
@@ -37,9 +31,9 @@ class FormDrawerUi extends Component<any, any> {
         return key;
     };
 
-    autoFocusRef: any = React.createRef();
+    autoFocusRef= React.createRef();
 
-    state: any = {
+    state= {
         visible: true
     };
 
@@ -49,8 +43,7 @@ class FormDrawerUi extends Component<any, any> {
         });
     };
 
-    setFocus = (isOpen: boolean) => {
-        // console.log("isOpen", isOpen);
+    setFocus = (isOpen) => {
         if (isOpen) {
             if (this.props.firstInputRef) {
                 this.props.firstInputRef.current.focus();
@@ -64,13 +57,11 @@ class FormDrawerUi extends Component<any, any> {
 
     render() {
         const {
-            t,
-            i18n,
-            saving = false,
             children,
             formId,
             formRef,
             formKey,
+            saving = false,
             onSubmit,
             show = false,
             forceTitle = false,
@@ -80,10 +71,10 @@ class FormDrawerUi extends Component<any, any> {
             noBottomActions = true,
             form,
             hasDeleteAction = true
-        }: any = this.props;
+        }= this.props;
 
 
-        let {initValues = null}: any = this.props;
+        let {initValues = null}= this.props;
 
         if (!initValues) {
             initValues = {};
@@ -91,13 +82,13 @@ class FormDrawerUi extends Component<any, any> {
 
         let title;
         if (initValues.id) {
-            title = t('Edit');
+            title = 'Edit';
         } else {
-            title = t('Add');
+            title = 'Add';
         }
 
         const validateMessages = {
-            required: "'${label}' " + t('is required') + "!",
+            required: "'${label}' " + 'is required' + "!",
             // ...
         };
 
@@ -105,7 +96,7 @@ class FormDrawerUi extends Component<any, any> {
         return (
             <Drawer
                 title={title}
-                placement={i18n.dir() === 'ltr' ? 'right' : 'left'}
+                // placement={i18n.dir() === 'ltr' ? 'right' : 'left'}
                 width={width}
                 style={{maxWidth: '100%'}}
                 onClose={closeCallback}
@@ -123,21 +114,21 @@ class FormDrawerUi extends Component<any, any> {
                                         htmlType="submit"
                                         type="primary"
                                     >
-                                        {t('Save')}
+                                        {'Save'}
                                     </Button>
                                     <Button
                                         onClick={closeCallback}
                                         type={'link'}
                                         style={{marginRight: 8}}
                                     >
-                                        {t('Cancel')}
+                                        {'Cancel'}
                                     </Button>
                                     {initValues.id && hasDeleteAction && (
                                         <Button
                                             onClick={this.deleteConfirm}
                                             type={'ghost'}
                                         >
-                                            {t('Delete')}
+                                            {'Delete'}
                                         </Button>
                                     )}
                                 </Space>
@@ -164,4 +155,4 @@ class FormDrawerUi extends Component<any, any> {
     }
 }
 
-export default withTranslation('common')(FormDrawerUi);
+export default FormDrawerUi;

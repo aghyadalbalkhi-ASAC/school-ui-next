@@ -1,11 +1,8 @@
 const mainState = {
     loading: false,
     error: false,
-    isLoggedUser: false,
     message: '',
-    mapActions: [],
-    user: null,
-    isFullHeightPage: false
+    pages: null,
 };
 
 export default mainState;

@@ -1,40 +1,49 @@
-import React, { useEffect,useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
-import { Card, Avatar, Col, Row,message } from 'antd';
+import { Card, Button, Col, Row, message } from 'antd';
 import Image from 'next/image'
-import { EditOutlined, DeleteOutlined,CheckCircleTwoTone } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, CheckCircleTwoTone } from '@ant-design/icons';
 import StudentImage from '../../public/Education_Student.jpg';
-import {Drawer, Form, Input,Button} from 'antd';
 import { useRouter } from 'next/router'
+import FormDrawer from '../__common/FormDrawer';
+import { Empty } from 'antd';
+import ManageForm from './partials/ManageForm';
+import ManageCreateForm from './partials/ManageCreateForm'
 
-import {getALlStudents} from './StudentsModel'
+import GridExample from './partials/StudentTable'
+import { getALlStudents,fetchCreateData,deleteStudent } from './StudentsModel'
 
 const { Meta } = Card;
 
 
-const showDeleteMoadel = ()=>{
-    message.success("showDeleteMoadel",3)
+const showDeleteMoadel = (StudentsEle,refresher) => {
+    deleteStudent(StudentsEle.StudentID).then(res=>{
+        refresher()
+        message.success("Student Deleted", 3)
+    }).catch(e=>{
+        message.error(e, 3)
+    })
+    
 
 }
 
 
-const StudentElement = ({ StudentsEle,SetShowDrawer,SetIsUpdate,SetselectedStudent }) => {
+const StudentElement = ({ StudentsEle, SetShowDrawer, SetIsUpdate, SetselectedStudent,refresher }) => {
     return (
- 
-        <Col span={8}>
+
+        <Col span={8} style={{marginBottom:"1%"}}>
             <Card key={StudentsEle.StudentID}
                 style={{ width: 300 }}
                 cover={
                     <Image src={StudentImage} alt="Picture of the author" />
                 }
                 actions={[
-                    <EditOutlined key="edit" onClick={() =>{
+                    <EditOutlined key="edit" onClick={() => {
                         SetShowDrawer(true)
                         SetIsUpdate(true)
                         SetselectedStudent(StudentsEle)
                     }} />,
-                    <DeleteOutlined key="Delete" onClick={showDeleteMoadel}  />,
+                    <DeleteOutlined key="Delete" onClick={()=>showDeleteMoadel(StudentsEle,refresher)} />,
                 ]}
             >
                 <Meta
@@ -48,139 +57,83 @@ const StudentElement = ({ StudentsEle,SetShowDrawer,SetIsUpdate,SetselectedStude
 
 }
 
+
+
+
 function StudentsUi(props) {
     const router = useRouter()
     // const classid =router.query.classid
     // const schoolId =router.query.id
-    const [showDrawer,SetShowDrawer]=useState(false)
-    const [isUpdate,SetIsUpdate]=useState(false)
-    const [selectedStudent,SetselectedStudent]=useState(null)
+    const [showDrawer, SetShowDrawer] = useState(false)
+    const [showCreateDrawer, SetShowCreateDrawer] = useState(false)
+    const [isUpdate, SetIsUpdate] = useState(false)
+    const [selectedStudent, SetselectedStudent] = useState(null)
 
     useEffect(async () => {
-      const result = await props.getALlStudents()
-  }, []);
+        const result = await props.getALlStudents()
+    }, []);
+
+
+    const CreateNewStudent = async ()=>{
+        SetShowCreateDrawer(true)
+    }
+
+    const refresher = async()=>{
+        router.reload(window.location.pathname)
+        console.log("refresr");
+        // router.push(router.asPath)
+    }
 
     return (
         <>
-        <h1>Hello Students</h1>
-            <Row gutter={100}>
-                {/* {students && props.schools.schools ?
-                    students.map(student => {
-                        return <StudentElement
-                                    StudentsEle={student}
-                                    SetShowDrawer={SetShowDrawer}
-                                    SetIsUpdate = {SetIsUpdate}
-                                    SetselectedStudent={SetselectedStudent}
-                                    />
-                    }) : <h1> Loading .....</h1>
-                } */}
+            <Row >
+                <Col className="gutter-row" offset={21}>
+                    <Button onClick={()=>{CreateNewStudent()}} type="primary">Add Student</Button>
+                </Col>
             </Row>
-            <FormDrawer
+            <Row>
+                <br></br>
+            </Row>
+            <Row gutter={100}>
+                {props.students ?
+                    props.students.map(student => {
+                        return <StudentElement
+                            StudentsEle={student}
+                            SetShowDrawer={SetShowDrawer}
+                            SetIsUpdate={SetIsUpdate}
+                            SetselectedStudent={SetselectedStudent}
+                            refresher={refresher}
+                        />
+                    }) : <Empty />
+                }
+            </Row>
+            <ManageForm
                 showDrawer={showDrawer}
                 SetShowDrawer={SetShowDrawer}
-                isUpdate = {isUpdate}
-                selectedStudent={selectedStudent}
-                />
-
+                data={selectedStudent}
+                refresher={refresher}
+            />
+            <ManageCreateForm
+                showDrawer={showCreateDrawer}
+                SetShowDrawer={SetShowCreateDrawer}
+                data={null}
+                refresher={refresher}
+            />
+            {props.students ?
+                <GridExample student={props.students}/>
+                : <div></div>
+             }
+       
         </>
     )
 }
-
-const FormDrawer = (props)=>{
-    const [form] = Form.useForm();
-    const width = "40%"
-
-        const onSubmit = (values) => {
-            console.log("submit");
-        };
-        
-
-        const onClose = () => {
-            SetShowDrawer(false)
-        };
-
-
-        const onFinishFailed = ({ errorFields }) => {
-            form.scrollToField(errorFields[0].name);
-        };
-        const {isUpdate,selectedStudent,showDrawer,SetShowDrawer} = props;
-        useEffect(() => {
-            if (isUpdate) {
-                form.setFieldsValue(selectedStudent);
-            } else {
-                form.resetFields();
-            }
-        }, [selectedStudent,isUpdate,showDrawer]);
-    return (
-        <>
-        <Drawer
-          title="Create a new account"
-          width={400}
-          onClose={onClose}
-          visible={showDrawer}
-          bodyStyle={{ paddingBottom: 80 }}
-          footer={
-            <div
-              style={{
-                textAlign: 'left'
-              }}
-            >
-              <Button onClick={onSubmit} type="primary">
-                Submit
-              </Button>
-
-              <Button onClick={onClose} style={{ marginRight: 8 }}>
-                Cancel
-              </Button>
-            </div>
-          }
-        >
-          <Form
-            layout="vertical"
-            hideRequiredMark
-            initialValues={selectedStudent}
-          >
-            <Row gutter={16}>
-              <Col span={12}>
-                <Form.Item
-                  name="StudentName"
-                  label="Student Name"
-                  rules={[
-                    { required: true, message: 'Please Enter Student Name' }
-                  ]}
-                >
-                  <Input />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={12}>
-              <Form.Item
-                  name="CreatedBy"
-                  label="Created By"
-                  rules={[
-                    { required: true, message: 'Please enter Created By' }
-                  ]}
-                >
-                  <Input />
-                </Form.Item>
-              </Col>
-            </Row>
-          </Form>
-        </Drawer>
-        </>
-    )
-
-}
-
-
 
 const mapStateToProps = (state) => ({
-    schools: state.schools,
+    students: state.students.students,
 });
 
-const mapDispatchToProps = (dispatch,schoolId) => ({
-  getALlStudents: () => getALlStudents(dispatch,schoolId)
+const mapDispatchToProps = (dispatch, schoolId) => ({
+    getALlStudents: () => getALlStudents(dispatch, schoolId),
 
 
 });

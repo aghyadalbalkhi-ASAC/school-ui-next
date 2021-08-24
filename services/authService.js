@@ -8,10 +8,10 @@ export const setUser = (data) => {
 };
 
 export const getUser = () => {
-
-    const token = JSON.parse(localStorage.getItem('token') || 'null');
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
+    // const token = JSON.parse(localStorage.getItem('token') || 'null');
     if (!token) {
-        return {};
+        return false;
     }
 
     const user = _getTokenData();

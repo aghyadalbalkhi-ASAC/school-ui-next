@@ -4,85 +4,81 @@ import axios from 'axios';
 import { Card, Button, Col, Row, message } from 'antd';
 import Image from 'next/image'
 import { EditOutlined, DeleteOutlined, CheckCircleTwoTone } from '@ant-design/icons';
-import schoolImage from '../../public/school.png';
+import classImage from '../../public/classroom.png'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 import ManageForm from './partials/ManageForm';
-import { SCHOOLS_LOADED } from './School.actions'
-import {deleteSchool} from './SchoolModel'
+import { PAGES_LOADED } from './PageCategories.actions'
+import { deletePage } from './PageCategoriesModel'
 
 
 const { Meta } = Card;
 
 
-const showDeleteMoadel = (SchoolID,refresher) => {
-    deleteSchool(SchoolID).then(res=>{
+const showDeleteMoadel = (ClassID, refresher) => {
+    deletePage(ClassID).then(res => {
         refresher()
-        message.success("School Deleted", 3)
-    }).catch(e=>{
+        message.success("Page Deleted", 3)
+    }).catch(e => {
         message.error(e, 3)
     })
-    
+
 
 }
 
 
-const SchoolElement = ({ school, selectSchoolDrwaer ,refresher}) => {
+const PageElement = ({ page, selectPageDrwaer, refresher }) => {
 
-    const OnSchool = () => {
-
-    }
     return (
         <Col span={8}>
-            <Card key={school.SchoolID}
+            <Card key={page.ClassID}
                 style={{ width: 300 }}
                 cover={
-                    <Link href={`/schools/${school.SchoolID}/classes/`}>
-                        <Image src={schoolImage} alt="Picture of the author" />
-                    </Link>
+                    <Image src={classImage} alt="Picture of the author" />
                 }
                 actions={[
                     <EditOutlined key="edit" onClick={() => {
-                        selectSchoolDrwaer(school)
+                        selectPageDrwaer(page)
                     }} />,
-                    <DeleteOutlined key="Delete" onClick={()=>showDeleteMoadel(school.SchoolID,refresher)} />,
+                    <DeleteOutlined key="Delete" onClick={() => showDeleteMoadel(page.ClassID, refresher)} />,
                 ]}
             >
                 <Meta
                     avatar={<CheckCircleTwoTone twoToneColor="#52c41a" />}
-                    title={school.SchoolName}
+                    title={page.ClassName}
                     description="This is the description"
                 />
             </Card>
+            <br></br><br></br>
         </Col>
     )
 
 }
 
-function SchoolUi(props) {
+function PageCategoriesUi(props) {
     const router = useRouter()
     const [showDrawer, SetShowDrawer] = useState(false)
     const [isUpdate, SetIsUpdate] = useState(false)
-    const [selectedSchool, SetselectedSchool] = useState(null)
+    const [selectedPage, SetselectedPage] = useState(null)
 
     useEffect(async () => {
-        const result = await props.fetchSchools()
+        const result = await props.fetchPages()
     }, []);
 
 
-    const selectSchoolDrwaer = (school) => {
-        SetselectedSchool(school)
+    const selectPageDrwaer = (page) => {
+        SetselectedPage(page)
         SetShowDrawer(true)
         SetIsUpdate(true)
     }
 
-    const CreateNewSchool = async ()=>{
-        SetselectedSchool(null)
+    const CreateNewPage = async () => {
+        SetselectedPage(null)
         SetShowDrawer(true)
     }
 
-    const refresher = async()=>{
+    const refresher = async () => {
         router.reload(window.location.pathname)
         console.log("refresr");
         // router.push(router.asPath)
@@ -90,27 +86,33 @@ function SchoolUi(props) {
     return (
         <>
             <Row >
-                <Col className="gutter-row" offset={21}>
-                    <Button onClick={()=>{CreateNewSchool()}} type="primary">Add School</Button>
+                <Col className="gutter-row" offset={18}>
+                    <Button onClick={() => { CreateNewPage() }} type="primary">Add New Class Gategory</Button>
                 </Col>
             </Row>
             <Row>
                 <br></br>
             </Row>
             <Row gutter={16}>
-                {props.schools.schools ?
-                    props.schools.schools.map(school => {
-                        return <SchoolElement
-                            school={school}
-                            selectSchoolDrwaer={selectSchoolDrwaer}
-                            refresher={refresher}
-                        />
+                {props.pages.pages ?
+                    props.pages.pages.map(page => {
+                        return (
+                            <>
+                            
+                                <PageElement
+                                    page={page}
+                                    selectPageDrwaer={selectPageDrwaer}
+                                    refresher={refresher}
+                                />
+
+                            </>
+                        )
                     }) : <h1> Loading .....</h1>
                 }
             </Row>
             <ManageForm
                 showDrawer={showDrawer}
-                data ={selectedSchool || null}
+                data={selectedPage || null}
                 SetShowDrawer={SetShowDrawer}
                 refresher={refresher}
                 SetIsUpdate={SetIsUpdate}
@@ -123,11 +125,11 @@ function SchoolUi(props) {
 
 
 async function getProductsFromDatabase(dispatch) {
-    const url = `http://[::1]:3000/schools?filter={%22include%22:[{%22relation%22:%22classEnrollmentRelationals%22,%22scope%22:{%22include%22:[{%22relation%22:%22students%22},{%22relation%22:%22classes%22}]}}]}`
+    const url = `http://[::1]:3000/classes`
 
     const pay = await axios.get(url).then(res => {
         dispatch({
-            type: SCHOOLS_LOADED,
+            type: PAGES_LOADED,
             payload: res.data
         })
     })
@@ -135,11 +137,11 @@ async function getProductsFromDatabase(dispatch) {
 }
 
 const mapStateToProps = state => ({
-    schools: state.schools,
+    pages: state.pages,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    fetchSchools: () => getProductsFromDatabase(dispatch)
+    fetchPages: () => getProductsFromDatabase(dispatch)
 
 });
-export default connect(mapStateToProps, mapDispatchToProps)(SchoolUi)
+export default connect(mapStateToProps, mapDispatchToProps)(PageCategoriesUi)

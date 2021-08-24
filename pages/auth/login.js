@@ -2,16 +2,20 @@ import React from 'react'
 import { Form, Input, Button, message,Row,Col,Card } from 'antd';
 import { loginUser } from '../../services/usersFunctionlity'
 import styles from '../../styles/login.module.css'
+import { useRouter } from 'next/router'
 
 function login() {
 
-
+    const router = useRouter()
     const onFinish = async ({ email, password }) => {
-        const is_logged = await loginUser(email, password);
-
-        if (is_logged?.ok) {
-            message.error(is_logged.error + ``);
+        const is_logged = await loginUser(email, password).then(res=>{
+        if (res?.ok) {
+            message.error(res.error + ``);
+        }else{
+            router.push("/schools")
         }
+    
+    });
 
     };
 
